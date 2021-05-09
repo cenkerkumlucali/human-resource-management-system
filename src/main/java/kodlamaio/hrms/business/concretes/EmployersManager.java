@@ -27,4 +27,22 @@ public class EmployersManager implements EmployersService {
     public void add(employers employers) {
         this.employersDao.save(employers);
     }
+
+    @Override
+    public void delete(Integer id) {
+        if(employersIdExists(id)){
+            this.employersDao.deleteById(id);
+        }else{
+            throw new IllegalStateException("employers with id "+ id + "does not exists");
+        }
+    }
+
+
+    private boolean employersIdExists(Integer id){
+        var exists = employersDao.existsById(id);
+        if(exists){
+            return true;
+        }
+        return false;
+    }
 }
