@@ -1,6 +1,7 @@
 package kodlamaio.hrms.business.concretes;
 
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
+import kodlamaio.hrms.core.utilities.results.*;
 import kodlamaio.hrms.dataAccess.abstracts.JobSeekerDao;
 import kodlamaio.hrms.entities.concretes.JobSeeker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,30 +19,28 @@ public class JobSeekerManager implements JobSeekerService {
     }
 
     @Override
-    public List<JobSeeker> getAll() {
-        return this.jobSeekerDao.findAll();
+    public DataResult<List<JobSeeker>> getAll() {
+        return new SuccessDataResult<List<JobSeeker>>( this.jobSeekerDao.findAll(),"Listelendi");
+
     }
 
     @Override
-    public void add(JobSeeker jobSeeker) {
+    public Result add(JobSeeker jobSeeker) {
     if(emailExist(jobSeeker.getEmail()) | nationalIdentityExist(jobSeeker.getNationalIdentity())){
-        throw new IllegalStateException("Job seeker already exists!");
+        return new ErrorResult("Job seeker already exists!");
     }
         this.jobSeekerDao.save(jobSeeker);
+        return new SuccessResult("Eklendi");
     }
 
     @Override
-    public void delete(Integer id) {
-        if(jobSeekerIdExists(id)){
-            this.jobSeekerDao.deleteById(id);
-        }else{
-            throw new IllegalStateException("jobseeker with id "+ id + "does not exists");
+    public Result delete(Integer id) {
+        if(!jobSeekerIdExists(id)){
+            return new ErrorResult("jobseeker with id "+ id + "does not exists");
         }
-    }
 
-    @Override
-    public void update(JobSeeker jobSeeker) {
-
+            this.jobSeekerDao.deleteById(id);
+       return new SuccessResult("Silindi");
     }
 
     private boolean emailExist(String email){

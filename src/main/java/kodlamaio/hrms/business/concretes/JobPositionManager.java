@@ -1,6 +1,7 @@
 package kodlamaio.hrms.business.concretes;
 
 import kodlamaio.hrms.business.abstracts.JobPositionService;
+import kodlamaio.hrms.core.utilities.results.*;
 import kodlamaio.hrms.dataAccess.abstracts.JobPositionDao;
 import kodlamaio.hrms.entities.concretes.JobPosition;
 import org.springframework.stereotype.Service;
@@ -17,21 +18,24 @@ public class JobPositionManager implements JobPositionService {
     }
 
     @Override
-    public List<JobPosition> getAll() {
-        return this.jobPositionDao.findAll();
+    public DataResult<List<JobPosition>> getAll() {
+        return new SuccessDataResult<List<JobPosition>>( this.jobPositionDao.findAll(),"Listelendi");
+
     }
 
     @Override
-    public void add(JobPosition jobPosition) {
+    public Result add(JobPosition jobPosition) {
         this.jobPositionDao.save(jobPosition);
+        return new SuccessResult("JobPosition added");
     }
 
     @Override
-    public void delete(Integer id) {
-        if(jobPositionExist(id)){
-            this.jobPositionDao.deleteById(id);
+    public Result delete(Integer id) {
+        if(!jobPositionExist(id)){
+            return new ErrorResult("JobPosition with id "+ id + "does not exists");
         }
-        throw new IllegalStateException("JobPosition with id "+ id + "does not exists");
+            this.jobPositionDao.deleteById(id);
+        return new SuccessResult("JobPosition deleted");
 
     }
 

@@ -2,6 +2,8 @@ package kodlamaio.hrms.api.controller;
 
 
 import kodlamaio.hrms.business.abstracts.EmployerService;
+import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.employers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +22,12 @@ public class EmployersController {
     }
 
     @GetMapping("/getall")
-    public List<employers> getAll(){
+    public DataResult<List<employers>> getAll(){
         return this.employersService.getAll();
     }
 
-
-
     @PostMapping("/add")
-    public void add(@RequestBody employers employers){
-        this.employersService.add(employers);
+    public Result add(@RequestBody employers employers){
+        return this.employersService.add(employers);
     }
 }

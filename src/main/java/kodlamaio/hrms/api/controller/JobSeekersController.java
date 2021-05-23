@@ -1,6 +1,8 @@
 package kodlamaio.hrms.api.controller;
 
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
+import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.JobSeeker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,15 +20,15 @@ public class JobSeekersController {
     }
 
     @GetMapping("/getall")
-    public List<JobSeeker> getAll(){
+    public DataResult<List<JobSeeker>> getAll(){
         return this.jobSeekerService.getAll();
     }
     @PostMapping("/add")
-    public void add(@RequestBody JobSeeker jobSeeker){
-        this.jobSeekerService.add(jobSeeker);
+    public Result add(@RequestBody JobSeeker jobSeeker){
+      return  this.jobSeekerService.add(jobSeeker);
     }
     @DeleteMapping(path = "/delete/{id}")
-    public void delete(@PathVariable Integer id,@RequestBody JobSeeker jobSeeker){
-        this.jobSeekerService.delete(id);
+    public Result delete(@PathVariable Integer id,@RequestBody JobSeeker jobSeeker){
+        return this.jobSeekerService.delete(id);
     }
 }

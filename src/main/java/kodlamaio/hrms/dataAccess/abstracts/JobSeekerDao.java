@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface JobSeekerDao extends JpaRepository<JobSeeker,Integer> {
 
-
-
     @Query("SELECT s FROM JobSeeker s WHERE s.email=?1")
     Optional<JobSeeker> findEmail(String email);
 

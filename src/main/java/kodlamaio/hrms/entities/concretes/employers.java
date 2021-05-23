@@ -1,36 +1,88 @@
 package kodlamaio.hrms.entities.concretes;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 @Entity
 @Table(name="employers")
-@Data
-public class employers {
-    @Id
-    @GeneratedValue
-    @Column(name="id")
-    private int id;
+@PrimaryKeyJoinColumn(name = "id")
+@AllArgsConstructor
+@NoArgsConstructor
+public class employers extends User{
+
     @Column(name="company_name")
     private String companyName;
     @Column(name="web_site")
     private String webSite;
-    @Column(name="email")
-    private String ePosta;
     @Column(name="phone_number")
     private String phoneNumber;
-    @Column(name="password")
-    private String password;
 
-    public employers() { }
-    public employers(int id, String companyName, String webSite, String ePosta, String phoneNumber, String password) {
-        this.id = id;
-        this.companyName = companyName;
-        this.webSite = webSite;
-        this.ePosta = ePosta;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
+
+    public String getCompanyName() {
+        return this.companyName;
     }
 
+    public String getWebSite() {
+        return this.webSite;
+    }
+
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void setWebSite(String webSite) {
+        this.webSite = webSite;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof employers)) return false;
+        final employers other = (employers) o;
+        if (!other.canEqual((Object) this)) return false;
+        final Object this$companyName = this.getCompanyName();
+        final Object other$companyName = other.getCompanyName();
+        if (this$companyName == null ? other$companyName != null : !this$companyName.equals(other$companyName))
+            return false;
+        final Object this$webSite = this.getWebSite();
+        final Object other$webSite = other.getWebSite();
+        if (this$webSite == null ? other$webSite != null : !this$webSite.equals(other$webSite)) return false;
+        final Object this$phoneNumber = this.getPhoneNumber();
+        final Object other$phoneNumber = other.getPhoneNumber();
+        if (this$phoneNumber == null ? other$phoneNumber != null : !this$phoneNumber.equals(other$phoneNumber))
+            return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof employers;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final Object $companyName = this.getCompanyName();
+        result = result * PRIME + ($companyName == null ? 43 : $companyName.hashCode());
+        final Object $webSite = this.getWebSite();
+        result = result * PRIME + ($webSite == null ? 43 : $webSite.hashCode());
+        final Object $phoneNumber = this.getPhoneNumber();
+        result = result * PRIME + ($phoneNumber == null ? 43 : $phoneNumber.hashCode());
+        return result;
+    }
+
+    public String toString() {
+        return "employers(companyName=" + this.getCompanyName() + ", webSite=" + this.getWebSite() + ", phoneNumber=" + this.getPhoneNumber() + ")";
+    }
 }
