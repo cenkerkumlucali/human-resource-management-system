@@ -27,7 +27,9 @@ public class EmployerManager implements EmployerService {
 
     @Override
     public Result add(employers employers) {
-
+    if(checkIfPasswordExists(employers.getPassword(),employers.getConfirmPassword())){
+        return new ErrorResult("Wrong password");
+    }
         this.employersDao.save(employers);
         return new SuccessResult("Employer added");
     }
@@ -47,5 +49,14 @@ public class EmployerManager implements EmployerService {
             return true;
         }
         return false;
+    }
+    private boolean checkIfPasswordExists(String password,String confirmPassword){
+        var result = password.equals(confirmPassword);
+        if (result){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

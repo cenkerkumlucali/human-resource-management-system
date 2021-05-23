@@ -29,6 +29,9 @@ public class JobSeekerManager implements JobSeekerService {
     if(emailExist(jobSeeker.getEmail()) | nationalIdentityExist(jobSeeker.getNationalIdentity())){
         return new ErrorResult("Job seeker already exists!");
     }
+    if(checkIfPasswordExists(jobSeeker.getPassword(),jobSeeker.getConfirmPassword())){
+        return new ErrorResult("Wrong password");
+    }
         this.jobSeekerDao.save(jobSeeker);
         return new SuccessResult("Eklendi");
     }
@@ -63,5 +66,14 @@ public class JobSeekerManager implements JobSeekerService {
             return true;
         }
         return false;
+    }
+    private boolean checkIfPasswordExists(String password,String confirmPassword){
+        var result = password.equals(confirmPassword);
+        if (result){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
