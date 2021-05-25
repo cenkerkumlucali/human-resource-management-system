@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="employers")
@@ -15,10 +16,13 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class employers extends User{
 
+    @NotNull(message = "Company name cannot be null")
     @Column(name="company_name")
     private String companyName;
+    @NotNull(message = "Web site  cannot be null")
     @Column(name="web_site")
     private String webSite;
+    @NotNull(message = "Phone number cannot be null")
     @Column(name="phone_number")
     private String phoneNumber;
 

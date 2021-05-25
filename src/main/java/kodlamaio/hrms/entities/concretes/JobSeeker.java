@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -15,12 +16,16 @@ import javax.persistence.Table;
 @Table(name="job_seekers")
 public class JobSeeker extends User {
 
+    @NotNull(message = "Name cannot be null")
     @Column(name="name")
     private String name;
+    @NotNull(message = "Surname cannot be null")
     @Column(name="surname")
     private String surname;
+    @NotNull(message = "Date of birth cannot be null")
     @Column(name="date_of_birth")
-    private int dateOfBirth;
+    private String dateOfBirth;
+    @NotNull(message = "National identity cannot be null")
     @Column(name="national_identity")
     private String nationalIdentity;
 
@@ -32,7 +37,7 @@ public class JobSeeker extends User {
         return this.surname;
     }
 
-    public int getDateOfBirth() {
+    public String getDateOfBirth() {
         return this.dateOfBirth;
     }
 
@@ -48,7 +53,7 @@ public class JobSeeker extends User {
         this.surname = surname;
     }
 
-    public void setDateOfBirth(int dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -75,24 +80,4 @@ public class JobSeeker extends User {
         return true;
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof JobSeeker;
-    }
-
-    public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $name = this.getName();
-        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-        final Object $surname = this.getSurname();
-        result = result * PRIME + ($surname == null ? 43 : $surname.hashCode());
-        result = result * PRIME + this.getDateOfBirth();
-        final Object $nationalIdentity = this.getNationalIdentity();
-        result = result * PRIME + ($nationalIdentity == null ? 43 : $nationalIdentity.hashCode());
-        return result;
-    }
-
-    public String toString() {
-        return "JobSeeker(name=" + this.getName() + ", surname=" + this.getSurname() + ", dateOfBirth=" + this.getDateOfBirth() + ", nationalIdentity=" + this.getNationalIdentity() + ")";
-    }
 }

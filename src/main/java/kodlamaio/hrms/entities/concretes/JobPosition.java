@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @AllArgsConstructor
@@ -14,6 +15,7 @@ public class JobPosition {
     @Column(name="id")
     @GeneratedValue
     private int id;
+    @NotNull(message = "Position cannot be null")
     @Column(name = "position")
     private String position;
 

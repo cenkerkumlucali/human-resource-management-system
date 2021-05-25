@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @AllArgsConstructor
@@ -16,10 +18,14 @@ public class User {
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull(message = "Email cannot be null")
+    @Email(message = "Email should be valid")
     @Column(name="email")
     private String email;
+    @NotNull(message = "Password cannot be null")
     @Column(name="password")
     private String password;
+    @NotNull(message = "Confirm password cannot be null")
     @Column(name= "confirm_password")
     private String confirmPassword;
 
