@@ -1,6 +1,9 @@
 package kodlamaio.hrms.business.concretes;
 
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
+import kodlamaio.hrms.business.adapters.ValidateMernis;
+import kodlamaio.hrms.business.adapters.ValidatePersonService;
+import kodlamaio.hrms.core.utilities.business.BusinessRules;
 import kodlamaio.hrms.core.utilities.results.*;
 import kodlamaio.hrms.dataAccess.abstracts.JobSeekerDao;
 import kodlamaio.hrms.entities.concretes.JobSeeker;
@@ -13,9 +16,11 @@ import java.util.List;
 public class JobSeekerManager implements JobSeekerService {
 
     JobSeekerDao jobSeekerDao;
+    ValidatePersonService validatePersonService;
     @Autowired
-    public JobSeekerManager(JobSeekerDao jobSeekerDao) {
+    public JobSeekerManager(JobSeekerDao jobSeekerDao,ValidatePersonService validatePersonService) {
         this.jobSeekerDao = jobSeekerDao;
+        this.validatePersonService = validatePersonService;
     }
 
     @Override
@@ -26,11 +31,13 @@ public class JobSeekerManager implements JobSeekerService {
 
     @Override
     public Result add(JobSeeker jobSeeker) {
-    if(emailExist(jobSeeker.getEmail()) | nationalIdentityExist(jobSeeker.getNationalIdentity())){
-        return new ErrorResult("Job seeker already exists!");
-    }
-    if(checkIfPasswordExists(jobSeeker.getPassword(),jobSeeker.getConfirmPassword())){
-        return new ErrorResult("Wrong password");
+
+    Result result = BusinessRules.run(emailExist(jobSeeker.getEmail()),
+                    nationalIdentityExist(jobSeeker.getNationalIdentity()),
+                    checkIfPasswordExists(jobSeeker.getPassword(),jobSeeker.getConfirmPassword()));
+
+    if (!result.isSuccess()){
+    return result;
     }
         this.jobSeekerDao.save(jobSeeker);
         return new SuccessResult("Eklendi");
@@ -38,42 +45,40 @@ public class JobSeekerManager implements JobSeekerService {
 
     @Override
     public Result delete(Integer id) {
-        if(!jobSeekerIdExists(id)){
-            return new ErrorResult("jobseeker with id "+ id + "does not exists");
+        Result result = BusinessRules.run(jobSeekerIdExists(id));
+        if (!result.isSuccess()){
+            return result;
         }
-
-            this.jobSeekerDao.deleteById(id);
-       return new SuccessResult("Silindi");
+        this.jobSeekerDao.deleteById(id);
+        return new SuccessResult("Silindi");
     }
 
-    private boolean emailExist(String email){
+    private Result emailExist(String email){
     var result = jobSeekerDao.findEmail(email).isPresent();
     if(result){
-        return true;
+        return new ErrorResult("Email exists");
     }
-    return false;
+    return new SuccessResult();
     }
-    private boolean nationalIdentityExist(String nationalIdentity){
+    private Result nationalIdentityExist(String nationalIdentity){
         var result = jobSeekerDao.findNationalIdentity(nationalIdentity).isPresent();
         if(result){
-            return true;
+            return new ErrorResult("zaten bu tc kimlik numarası kullanılıyor");
         }
-        return false;
+        return new SuccessResult();
     }
-    private boolean jobSeekerIdExists(Integer id){
+    private Result jobSeekerIdExists(Integer id){
         var exists = jobSeekerDao.existsById(id);
         if(exists){
-            return true;
+            return new ErrorResult("jobseeker with id "+ id + "does not exists");
         }
-        return false;
+        return new SuccessResult();
     }
-    private boolean checkIfPasswordExists(String password,String confirmPassword){
+    private Result checkIfPasswordExists(String password,String confirmPassword){
         var result = password.equals(confirmPassword);
         if (result){
-            return true;
+            return new ErrorResult("Paralolar eşleşmiyor");
         }
-        else{
-            return false;
-        }
+        return new SuccessResult();
     }
 }
