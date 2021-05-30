@@ -1,5 +1,6 @@
 package kodlamaio.hrms.business.concretes;
 
+import kodlamaio.hrms.business.abstracts.ActivationCodeService;
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
 import kodlamaio.hrms.business.adapters.ValidateMernis;
 import kodlamaio.hrms.business.adapters.ValidatePersonService;
@@ -20,8 +21,7 @@ public class JobSeekerManager implements JobSeekerService {
     @Autowired
     public JobSeekerManager(JobSeekerDao jobSeekerDao,ValidatePersonService validatePersonService) {
         this.jobSeekerDao = jobSeekerDao;
-        this.validatePersonService = validatePersonService;
-    }
+        this.validatePersonService = validatePersonService; }
 
     @Override
     public DataResult<List<JobSeeker>> getAll() {
@@ -63,14 +63,14 @@ public class JobSeekerManager implements JobSeekerService {
     private Result nationalIdentityExist(String nationalIdentity){
         var result = jobSeekerDao.findNationalIdentity(nationalIdentity).isPresent();
         if(result){
-            return new ErrorResult("zaten bu tc kimlik numarası kullanılıyor");
+            return new ErrorResult("Zaten bu tc kimlik numarası kullanılıyor");
         }
         return new SuccessResult();
     }
     private Result jobSeekerIdExists(Integer id){
         var exists = jobSeekerDao.existsById(id);
         if(exists){
-            return new ErrorResult("jobseeker with id "+ id + "does not exists");
+            return new ErrorResult("İş arayalanlarda bu id :"+ id + " mevcut değil");
         }
         return new SuccessResult();
     }
